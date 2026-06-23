@@ -2,14 +2,14 @@ package osornogourmet.data.database
 
 import org.jetbrains.exposed.dao.id.LongIdTable
 
-object FoodPlacesTable : LongIdTable("food_places") {
-    val name = varchar("name", 255)
-    val description = text("description")
-    val category = varchar("category", 100)
-    val address = varchar("address", 255)
-    val latitude = double("latitude")
-    val longitude = double("longitude")
-    val rating = float("rating").default(0f)
-    val imageUrl = varchar("image_url", 500).default("")
-    val createdByUserId = long("created_by_user_id").references(UsersTable.id)
+object FoodPlacesTable : LongIdTable("lugares_comida") {
+    val nombre = varchar("nombre", 255)
+    val descripcion = text("descripcion")
+    val categoria = varchar("categoria", 100)
+    val direccion = varchar("direccion", 255)
+    val latitud = double("latitud")
+    val longitud = double("longitud")
+    val calificacion = float("calificacion").default(0f)
+    val urlImagen = varchar("url_imagen", 500).default("")
+    val creadoPorUsuarioId = long("creado_por_usuario_id").references(UsersTable.id)
 }

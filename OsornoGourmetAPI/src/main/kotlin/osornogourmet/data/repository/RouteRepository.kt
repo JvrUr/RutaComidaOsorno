@@ -27,22 +27,22 @@ class RouteRepository : IRouteRepository {
 
     override suspend fun insert(route: Route): Long = dbQuery {
         RoutesTable.insertAndGetId {
-            it[name] = route.name
-            it[description] = route.description
-            it[foodPlaceIds] = RouteMapper.idsToJson(route.foodPlaceIds)
-            it[createdByUserId] = route.createdByUserId
-            it[estimatedDuration] = route.estimatedDuration
-            it[estimatedDistance] = route.estimatedDistance
+            it[nombre] = route.name
+            it[descripcion] = route.description
+            it[idsLugaresComida] = RouteMapper.idsToJson(route.foodPlaceIds)
+            it[creadoPorUsuarioId] = route.createdByUserId
+            it[duracionEstimada] = route.estimatedDuration
+            it[distanciaEstimada] = route.estimatedDistance
         }.value
     }
 
     override suspend fun update(id: Long, route: Route): Boolean = dbQuery {
         RoutesTable.update({ RoutesTable.id eq id }) {
-            it[name] = route.name
-            it[description] = route.description
-            it[foodPlaceIds] = RouteMapper.idsToJson(route.foodPlaceIds)
-            it[estimatedDuration] = route.estimatedDuration
-            it[estimatedDistance] = route.estimatedDistance
+            it[nombre] = route.name
+            it[descripcion] = route.description
+            it[idsLugaresComida] = RouteMapper.idsToJson(route.foodPlaceIds)
+            it[duracionEstimada] = route.estimatedDuration
+            it[distanciaEstimada] = route.estimatedDistance
         } > 0
     }
 

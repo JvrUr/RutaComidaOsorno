@@ -9,15 +9,15 @@ object FoodPlaceMapper {
     fun toDomain(row: ResultRow): FoodPlace {
         return FoodPlace(
             id = row[FoodPlacesTable.id].value,
-            name = row[FoodPlacesTable.name],
-            description = row[FoodPlacesTable.description],
-            category = row[FoodPlacesTable.category],
-            address = row[FoodPlacesTable.address],
-            latitude = row[FoodPlacesTable.latitude],
-            longitude = row[FoodPlacesTable.longitude],
-            rating = row[FoodPlacesTable.rating],
-            imageUrl = row[FoodPlacesTable.imageUrl],
-            createdByUserId = row[FoodPlacesTable.createdByUserId]
+            name = row[FoodPlacesTable.nombre],
+            description = row[FoodPlacesTable.descripcion],
+            category = row[FoodPlacesTable.categoria],
+            address = row[FoodPlacesTable.direccion],
+            latitude = row[FoodPlacesTable.latitud],
+            longitude = row[FoodPlacesTable.longitud],
+            rating = row[FoodPlacesTable.calificacion],
+            imageUrl = row[FoodPlacesTable.urlImagen],
+            createdByUserId = row[FoodPlacesTable.creadoPorUsuarioId]
         )
     }
 

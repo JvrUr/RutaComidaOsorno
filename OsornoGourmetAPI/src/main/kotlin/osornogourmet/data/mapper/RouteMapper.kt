@@ -9,7 +9,7 @@ import osornogourmet.domain.model.Route
 
 object RouteMapper {
     fun toDomain(row: ResultRow): Route {
-        val idsJson = row[RoutesTable.foodPlaceIds]
+        val idsJson = row[RoutesTable.idsLugaresComida]
         val idsList = try {
             Json.decodeFromString<List<Long>>(idsJson)
         } catch (e: Exception) {
@@ -18,12 +18,12 @@ object RouteMapper {
 
         return Route(
             id = row[RoutesTable.id].value,
-            name = row[RoutesTable.name],
-            description = row[RoutesTable.description],
+            name = row[RoutesTable.nombre],
+            description = row[RoutesTable.descripcion],
             foodPlaceIds = idsList,
-            createdByUserId = row[RoutesTable.createdByUserId],
-            estimatedDuration = row[RoutesTable.estimatedDuration],
-            estimatedDistance = row[RoutesTable.estimatedDistance]
+            createdByUserId = row[RoutesTable.creadoPorUsuarioId],
+            estimatedDuration = row[RoutesTable.duracionEstimada],
+            estimatedDistance = row[RoutesTable.distanciaEstimada]
         )
     }
 

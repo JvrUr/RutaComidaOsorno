@@ -17,16 +17,16 @@ class UserRepository : IUserRepository {
 
     override suspend fun findByEmail(email: String): User? = dbQuery {
         UsersTable
-            .select { UsersTable.email eq email }
+            .select { UsersTable.correo eq email }
             .map { UserMapper.toDomain(it) }
             .singleOrNull()
     }
 
     override suspend fun insert(user: User): Long = dbQuery {
         UsersTable.insertAndGetId {
-            it[email] = user.email
-            it[name] = user.name
-            it[passwordHash] = user.passwordHash
+            it[correo] = user.email
+            it[nombre] = user.name
+            it[contrasenaHash] = user.passwordHash
         }.value
     }
 

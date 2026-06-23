@@ -34,34 +34,34 @@ class FoodPlaceRepository : IFoodPlaceRepository {
 
     override suspend fun findByCategory(category: String): List<FoodPlace> = dbQuery {
         FoodPlacesTable
-            .select { FoodPlacesTable.category eq category }
+            .select { FoodPlacesTable.categoria eq category }
             .map { FoodPlaceMapper.toDomain(it) }
     }
 
     override suspend fun insert(foodPlace: FoodPlace): Long = dbQuery {
         FoodPlacesTable.insertAndGetId {
-            it[name] = foodPlace.name
-            it[description] = foodPlace.description
-            it[category] = foodPlace.category
-            it[address] = foodPlace.address
-            it[latitude] = foodPlace.latitude
-            it[longitude] = foodPlace.longitude
-            it[rating] = foodPlace.rating
-            it[imageUrl] = foodPlace.imageUrl
-            it[createdByUserId] = foodPlace.createdByUserId
+            it[nombre] = foodPlace.name
+            it[descripcion] = foodPlace.description
+            it[categoria] = foodPlace.category
+            it[direccion] = foodPlace.address
+            it[latitud] = foodPlace.latitude
+            it[longitud] = foodPlace.longitude
+            it[calificacion] = foodPlace.rating
+            it[urlImagen] = foodPlace.imageUrl
+            it[creadoPorUsuarioId] = foodPlace.createdByUserId
         }.value
     }
 
     override suspend fun update(id: Long, foodPlace: FoodPlace): Boolean = dbQuery {
         FoodPlacesTable.update({ FoodPlacesTable.id eq id }) {
-            it[name] = foodPlace.name
-            it[description] = foodPlace.description
-            it[category] = foodPlace.category
-            it[address] = foodPlace.address
-            it[latitude] = foodPlace.latitude
-            it[longitude] = foodPlace.longitude
-            it[rating] = foodPlace.rating
-            it[imageUrl] = foodPlace.imageUrl
+            it[nombre] = foodPlace.name
+            it[descripcion] = foodPlace.description
+            it[categoria] = foodPlace.category
+            it[direccion] = foodPlace.address
+            it[latitud] = foodPlace.latitude
+            it[longitud] = foodPlace.longitude
+            it[calificacion] = foodPlace.rating
+            it[urlImagen] = foodPlace.imageUrl
         } > 0
     }
 

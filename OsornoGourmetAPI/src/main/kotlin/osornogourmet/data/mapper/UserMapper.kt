@@ -8,9 +8,9 @@ object UserMapper {
     fun toDomain(row: ResultRow): User {
         return User(
             id = row[UsersTable.id].value,
-            email = row[UsersTable.email],
-            name = row[UsersTable.name],
-            passwordHash = row[UsersTable.passwordHash]
+            email = row[UsersTable.correo],
+            name = row[UsersTable.nombre],
+            passwordHash = row[UsersTable.contrasenaHash]
         )
     }
 }
