@@ -25,6 +25,13 @@ class FoodPlaceRepository : IFoodPlaceRepository {
             .singleOrNull()
     }
 
+    override suspend fun findByIds(ids: List<Long>): List<FoodPlace> = dbQuery {
+        if (ids.isEmpty()) return@dbQuery emptyList()
+        FoodPlacesTable
+            .select { FoodPlacesTable.id inList ids }
+            .map { FoodPlaceMapper.toDomain(it) }
+    }
+
     override suspend fun findByCategory(category: String): List<FoodPlace> = dbQuery {
         FoodPlacesTable
             .select { FoodPlacesTable.category eq category }

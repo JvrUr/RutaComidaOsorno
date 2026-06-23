@@ -27,6 +27,11 @@ fun Route.foodPlaceRoutes(foodPlaceService: FoodPlaceService) {
             call.respond(foodPlaceService.getByCategory(cat))
         }
 
+        post("/batch") {
+            val ids = call.receive<List<Long>>()
+            call.respond(foodPlaceService.getByIds(ids))
+        }
+
         // Rutas protegidas (crear, actualizar, borrar locales)
         authenticate("auth-jwt") {
             post {

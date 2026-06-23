@@ -32,7 +32,7 @@ class RemoteFoodPlaceRepositoryImpl(
 
     override suspend fun insert(foodPlace: FoodPlace): Long {
         return try {
-            api.createFoodPlace(foodPlace.toDto())
+            api.createFoodPlace(foodPlace.toDto()).id ?: -1L
         } catch (e: Exception) {
             e.printStackTrace()
             -1L

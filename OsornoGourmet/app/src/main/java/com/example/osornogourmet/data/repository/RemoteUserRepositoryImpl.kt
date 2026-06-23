@@ -27,14 +27,9 @@ class RemoteUserRepositoryImpl(
     }
 
     override suspend fun register(user: User): Long = withContext(Dispatchers.IO) {
-        try {
-            val response = api.register(UserRegisterRequest(user.email, user.name, user.passwordHash))
-            tokenManager.saveToken(response.token)
-            return@withContext 1L
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return@withContext -1L
-        }
+        val response = api.register(UserRegisterRequest(user.email, user.name, user.passwordHash))
+        tokenManager.saveToken(response.token)
+        return@withContext 1L
     }
 
     override suspend fun getUserById(id: Long): User? {

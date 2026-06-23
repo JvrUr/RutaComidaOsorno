@@ -3,6 +3,7 @@ package osornogourmet
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.selectAll
 import osornogourmet.data.database.FoodPlacesTable
 import osornogourmet.data.database.RoutesTable
 import osornogourmet.data.database.UsersTable
@@ -30,9 +31,9 @@ object DatabaseSeeder {
         val foodPlaceService = FoodPlaceService(foodPlaceRepository)
 
         runBlocking {
-            val usersCount = transaction { UsersTable.select(UsersTable.id).count() }
+            val placesCount = transaction { FoodPlacesTable.selectAll().count() }
             
-            if (usersCount == 0L) {
+            if (placesCount == 0L) {
                 // Crear usuario admin inicial
                 val admin = authService.register(
                     RegisterRequest(

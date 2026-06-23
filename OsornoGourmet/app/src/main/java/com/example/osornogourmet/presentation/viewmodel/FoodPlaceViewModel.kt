@@ -104,6 +104,7 @@ class FoodPlaceViewModel(
         viewModelScope.launch {
             try {
                 addFoodPlaceUseCase(foodPlace)
+                loadFoodPlaces()
                 onSuccess()
             } catch (e: Exception) {
                 _error.value = "Error al agregar local: ${e.message}"
@@ -118,6 +119,7 @@ class FoodPlaceViewModel(
         viewModelScope.launch {
             try {
                 updateFoodPlaceUseCase(foodPlace)
+                loadFoodPlaces()
                 onSuccess()
             } catch (e: Exception) {
                 _error.value = "Error al actualizar local: ${e.message}"
@@ -132,6 +134,7 @@ class FoodPlaceViewModel(
         viewModelScope.launch {
             try {
                 deleteFoodPlaceUseCase(foodPlace)
+                loadFoodPlaces()
                 onSuccess()
             } catch (e: Exception) {
                 _error.value = "Error al eliminar local: ${e.message}"

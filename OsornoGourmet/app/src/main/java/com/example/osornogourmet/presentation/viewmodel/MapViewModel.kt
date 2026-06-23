@@ -103,6 +103,12 @@ class MapViewModel(
                     // Trazar ruta con OpenRouteService
                     if (foodPlaces.size >= 2) {
                         traceRoute(foodPlaces)
+                    } else {
+                        // Not enough points to trace a route
+                        _uiState.value = _uiState.value.copy(
+                            isLoadingRoute = false,
+                            error = if (foodPlaces.isEmpty()) "La ruta no tiene locales asignados." else "Se necesitan al menos 2 locales para trazar una ruta."
+                        )
                     }
                 }
             } catch (e: Exception) {

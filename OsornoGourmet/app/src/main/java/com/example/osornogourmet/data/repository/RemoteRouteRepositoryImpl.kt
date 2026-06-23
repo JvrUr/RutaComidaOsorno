@@ -31,7 +31,7 @@ class RemoteRouteRepositoryImpl(
 
     override suspend fun insert(route: Route): Long {
         return try {
-            api.createRoute(route.toDto())
+            api.createRoute(route.toDto()).id ?: -1L
         } catch (e: Exception) {
             e.printStackTrace()
             -1L

@@ -1,22 +1,29 @@
 package com.example.osornogourmet.presentation.ui.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.rounded.Map
+import androidx.compose.material.icons.rounded.Route
+import androidx.compose.material.icons.rounded.Restaurant
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,7 +35,7 @@ import com.example.osornogourmet.presentation.viewmodel.FoodPlaceViewModel
 import com.example.osornogourmet.presentation.viewmodel.RouteViewModel
 
 /**
- * Pantalla principal (Dashboard) con resumen de locales y rutas
+ * Pantalla principal (Dashboard) con diseño elegante
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,14 +59,17 @@ fun HomeScreen(
                 title = {
                     Column {
                         Text(
-                            "¡Hola, $userName! 👋",
-                            style = MaterialTheme.typography.titleLarge,
-                            color = TextWhite
+                            "¡Hola, $userName! \uD83D\uDC4B",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = TextWhite,
+                            fontWeight = FontWeight.Light
                         )
                         Text(
-                            "Descubre la gastronomía de Osorno",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = TextGray
+                            "Descubre Osorno",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = GoldAccent,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 1.sp
                         )
                     }
                 },
@@ -68,283 +78,313 @@ fun HomeScreen(
                         Icon(
                             Icons.AutoMirrored.Filled.Logout,
                             contentDescription = "Cerrar sesión",
-                            tint = TextGray
+                            tint = TextWhite
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = DarkBackground
+                    containerColor = Color.Transparent
                 )
             )
         },
-        containerColor = DarkBackground
+        containerColor = Color.Transparent
     ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .verticalScroll(scrollState)
-                .padding(16.dp)
-        ) {
-            // Tarjetas de resumen
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                SummaryCard(
-                    icon = Icons.Default.Restaurant,
-                    title = "Locales",
-                    count = foodPlaces.size.toString(),
-                    gradient = listOf(OrangeMain, OrangeDark),
-                    modifier = Modifier.weight(1f),
-                    onClick = onNavigateToFoodPlaces
-                )
-                SummaryCard(
-                    icon = Icons.Default.Route,
-                    title = "Rutas",
-                    count = routes.size.toString(),
-                    gradient = listOf(GoldAccent, OrangeMain),
-                    modifier = Modifier.weight(1f),
-                    onClick = onNavigateToRoutes
-                )
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Accesos rápidos
-            Text(
-                "Acceso Rápido",
-                style = MaterialTheme.typography.headlineMedium,
-                color = TextWhite
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                QuickAccessCard(
-                    icon = Icons.Default.Map,
-                    title = "Ver Mapa",
-                    subtitle = "Explora locales",
-                    onClick = onNavigateToMap,
-                    modifier = Modifier.weight(1f)
-                )
-                QuickAccessCard(
-                    icon = Icons.Default.AddLocation,
-                    title = "Nueva Ruta",
-                    subtitle = "Crea un recorrido",
-                    onClick = onNavigateToRoutes,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Locales destacados
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    "Locales Destacados",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = TextWhite
-                )
-                TextButton(onClick = onNavigateToFoodPlaces) {
-                    Text("Ver todos", color = OrangeMain)
-                }
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-
-            if (foodPlaces.isEmpty()) {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = DarkCard),
-                    shape = RoundedCornerShape(16.dp)
-                ) {
-                    Text(
-                        "Cargando locales...",
-                        modifier = Modifier.padding(24.dp),
-                        color = TextGray
-                    )
-                }
-            } else {
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    items(foodPlaces.take(8)) { place ->
-                        FeaturedFoodPlaceCard(
-                            foodPlace = place,
-                            onClick = { onNavigateToFoodPlaceDetail(place.id) }
-                        )
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Categorías disponibles
-            Text(
-                "Categorías",
-                style = MaterialTheme.typography.headlineMedium,
-                color = TextWhite
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-
-            val categoryCounts = foodPlaces.groupBy { it.category }.mapValues { it.value.size }
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(categoryCounts.entries.toList()) { (category, count) ->
-                    AssistChip(
-                        onClick = onNavigateToFoodPlaces,
-                        label = { Text("${category.displayName} ($count)") },
-                        colors = AssistChipDefaults.assistChipColors(
-                            containerColor = DarkCard,
-                            labelColor = TextWhite
-                        ),
-                        border = AssistChipDefaults.assistChipBorder(
-                            enabled = true,
-                            borderColor = OrangeMain.copy(alpha = 0.5f)
-                        )
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(32.dp))
-        }
-    }
-}
-
-/**
- * Tarjeta de resumen con gradiente
- */
-@Composable
-fun SummaryCard(
-    icon: ImageVector,
-    title: String,
-    count: String,
-    gradient: List<androidx.compose.ui.graphics.Color>,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-) {
-    Card(
-        modifier = modifier
-            .height(120.dp)
-            .clickable(onClick = onClick),
-        shape = RoundedCornerShape(20.dp)
-    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Brush.linearGradient(gradient))
-                .padding(16.dp)
-        ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                Icon(
-                    icon,
-                    contentDescription = null,
-                    tint = TextWhite.copy(alpha = 0.9f),
-                    modifier = Modifier.size(28.dp)
+                .background(
+                    Brush.linearGradient(
+                        colors = listOf(DarkBackground, DarkSurface, WarmBrown.copy(alpha = 0.4f)),
+                        start = Offset(0f, 0f),
+                        end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
+                    )
                 )
-                Column {
+        ) {
+            // Orbes decorativos
+            Box(
+                modifier = Modifier
+                    .offset(x = 100.dp, y = (-50).dp)
+                    .size(250.dp)
+                    .background(
+                        Brush.radialGradient(
+                            colors = listOf(OrangeMain.copy(alpha = 0.15f), Color.Transparent)
+                        ),
+                        shape = CircleShape
+                    )
+            )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .verticalScroll(scrollState)
+                    .padding(horizontal = 24.dp)
+            ) {
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Accesos rápidos (Orden invertido y diseño de píldora)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    ElegantQuickAccess(
+                        icon = Icons.Rounded.Route,
+                        title = "Rutas",
+                        subtitle = "Explorar",
+                        gradient = listOf(GoldAccent, OrangeMain),
+                        onClick = onNavigateToRoutes,
+                        modifier = Modifier.weight(1f)
+                    )
+                    ElegantQuickAccess(
+                        icon = Icons.Rounded.Map,
+                        title = "Mapa",
+                        subtitle = "Ubicaciones",
+                        gradient = listOf(OrangeMain, OrangeDark),
+                        onClick = onNavigateToMap,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(40.dp))
+
+                // Resumen estadístico elegante
+                Text(
+                    "TU ACTIVIDAD",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = TextGray,
+                    letterSpacing = 2.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    ElegantSummaryCard(
+                        value = foodPlaces.size.toString(),
+                        label = "Locales registrados",
+                        modifier = Modifier.weight(1f)
+                    )
+                    ElegantSummaryCard(
+                        value = routes.size.toString(),
+                        label = "Rutas trazadas",
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(40.dp))
+
+                // Locales destacados
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Text(
-                        count,
-                        style = MaterialTheme.typography.displayMedium,
-                        color = TextWhite,
+                        "DESTACADOS",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = TextGray,
+                        letterSpacing = 2.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        title,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = TextWhite.copy(alpha = 0.8f)
+                        "Ver todos",
+                        color = GoldAccent,
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.clickable { onNavigateToFoodPlaces() }
                     )
                 }
+                
+                Spacer(modifier = Modifier.height(16.dp))
+
+                if (foodPlaces.isEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(120.dp)
+                            .border(1.dp, TextGray.copy(alpha = 0.2f), RoundedCornerShape(16.dp)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("Aún no hay locales", color = TextGray)
+                    }
+                } else {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        items(foodPlaces.take(8)) { place ->
+                            ElegantFoodPlaceCard(
+                                foodPlace = place,
+                                onClick = { onNavigateToFoodPlaceDetail(place.id) }
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(40.dp))
+
+                // Categorías en chips translúcidos
+                Text(
+                    "EXPLORAR POR",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = TextGray,
+                    letterSpacing = 2.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                val categoryCounts = foodPlaces.groupBy { it.category }.mapValues { it.value.size }
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(categoryCounts.entries.toList()) { (category, count) ->
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(20.dp))
+                                .background(Color.White.copy(alpha = 0.05f))
+                                .border(1.dp, Color.White.copy(alpha = 0.1f), RoundedCornerShape(20.dp))
+                                .clickable { onNavigateToFoodPlaces() }
+                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                        ) {
+                            Text(
+                                "${category.displayName} ($count)",
+                                color = TextWhite,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(40.dp))
             }
         }
     }
 }
 
-/**
- * Tarjeta de acceso rápido
- */
 @Composable
-fun QuickAccessCard(
+fun ElegantQuickAccess(
     icon: ImageVector,
     title: String,
     subtitle: String,
+    gradient: List<Color>,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier.clickable(onClick = onClick),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = DarkCard)
+    Box(
+        modifier = modifier
+            .height(110.dp)
+            .clip(RoundedCornerShape(24.dp))
+            .background(Brush.linearGradient(gradient))
+            .clickable(onClick = onClick)
+            .padding(16.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             Icon(
                 icon,
                 contentDescription = null,
-                tint = OrangeMain,
-                modifier = Modifier.size(32.dp)
+                tint = TextWhite,
+                modifier = Modifier.size(28.dp)
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(title, style = MaterialTheme.typography.titleMedium, color = TextWhite)
-            Text(subtitle, style = MaterialTheme.typography.bodySmall, color = TextGray)
+            Column {
+                Text(
+                    title,
+                    color = TextWhite,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
+                Text(
+                    subtitle,
+                    color = TextWhite.copy(alpha = 0.8f),
+                    fontSize = 12.sp
+                )
+            }
         }
     }
 }
 
-/**
- * Tarjeta de local destacado (horizontal scroll)
- */
 @Composable
-fun FeaturedFoodPlaceCard(
+fun ElegantSummaryCard(
+    value: String,
+    label: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(20.dp))
+            .background(Color.White.copy(alpha = 0.03f))
+            .border(1.dp, Color.White.copy(alpha = 0.05f), RoundedCornerShape(20.dp))
+            .padding(20.dp),
+        horizontalAlignment = Alignment.Start
+    ) {
+        Text(
+            value,
+            style = MaterialTheme.typography.displaySmall,
+            color = TextWhite,
+            fontWeight = FontWeight.Light
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            label,
+            style = MaterialTheme.typography.bodySmall,
+            color = TextGray
+        )
+    }
+}
+
+@Composable
+fun ElegantFoodPlaceCard(
     foodPlace: FoodPlace,
     onClick: () -> Unit
 ) {
-    Card(
+    Box(
         modifier = Modifier
-            .width(200.dp)
-            .clickable(onClick = onClick),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = DarkCard)
+            .width(220.dp)
+            .clip(RoundedCornerShape(20.dp))
+            .background(Color.White.copy(alpha = 0.03f))
+            .border(1.dp, Color.White.copy(alpha = 0.05f), RoundedCornerShape(20.dp))
+            .clickable(onClick = onClick)
+            .padding(16.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            // Icono de categoría
-            Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(OrangeMain.copy(alpha = 0.15f)),
-                contentAlignment = Alignment.Center
+        Column {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
             ) {
-                Text(
-                    text = when (foodPlace.category.name) {
-                        "RESTAURANTE" -> "🍽️"
-                        "CAFETERIA" -> "☕"
-                        "PANADERIA" -> "🥖"
-                        "COMIDA_RAPIDA" -> "🍔"
-                        "MARISQUERIA" -> "🦐"
-                        "PASTELERIA" -> "🎂"
-                        "HELADERIA" -> "🍦"
-                        else -> "🍴"
-                    },
-                    fontSize = 24.sp
-                )
+                // Icono transparente suave
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(OrangeMain.copy(alpha = 0.2f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(Icons.Rounded.Restaurant, contentDescription = null, tint = OrangeMain, modifier = Modifier.size(20.dp))
+                }
+                
+                // Rating
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Default.Star,
+                        contentDescription = null,
+                        tint = GoldAccent,
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        String.format("%.1f", foodPlace.rating),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = GoldAccent,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Text(
                 foodPlace.name,
@@ -353,28 +393,12 @@ fun FeaturedFoodPlaceCard(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 foodPlace.category.displayName,
                 style = MaterialTheme.typography.bodySmall,
-                color = OrangeMain
+                color = TextGray
             )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    Icons.Default.Star,
-                    contentDescription = null,
-                    tint = GoldAccent,
-                    modifier = Modifier.size(16.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    String.format("%.1f", foodPlace.rating),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = GoldAccent
-                )
-            }
         }
     }
 }

@@ -2,13 +2,13 @@ package com.example.osornogourmet.data.remote.dto
 
 data class UserLoginRequest(
     val email: String,
-    val password: String
+    val passwordHash: String
 )
 
 data class UserRegisterRequest(
     val email: String,
     val name: String,
-    val password: String
+    val passwordHash: String
 )
 
 data class TokenResponse(

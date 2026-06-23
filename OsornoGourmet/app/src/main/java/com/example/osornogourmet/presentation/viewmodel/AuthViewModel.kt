@@ -67,8 +67,12 @@ class AuthViewModel(
                     onSuccess = {
                         // Iniciar sesión automáticamente tras registro exitoso
                         val user = loginUseCase(email, password)
-                        _currentUser.value = user
-                        _uiState.value = AuthUiState(isSuccess = true)
+                        if (user != null) {
+                            _currentUser.value = user
+                            _uiState.value = AuthUiState(isSuccess = true)
+                        } else {
+                            _uiState.value = AuthUiState(error = "Registro exitoso, pero falló el inicio de sesión automático.")
+                        }
                     },
                     onFailure = { e ->
                         _uiState.value = AuthUiState(error = e.message ?: "Error al registrarse")

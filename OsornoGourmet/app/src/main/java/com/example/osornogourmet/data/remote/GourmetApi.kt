@@ -13,25 +13,25 @@ interface GourmetApi {
     suspend fun register(@Body request: UserRegisterRequest): TokenResponse
 
     // Food Places
-    @GET("api/foodplaces")
+    @GET("api/food-places")
     suspend fun getFoodPlaces(): List<FoodPlaceDto>
 
-    @GET("api/foodplaces/category/{category}")
+    @GET("api/food-places/category/{category}")
     suspend fun getFoodPlacesByCategory(@Path("category") category: String): List<FoodPlaceDto>
 
-    @GET("api/foodplaces/{id}")
+    @GET("api/food-places/{id}")
     suspend fun getFoodPlaceById(@Path("id") id: Long): FoodPlaceDto
 
-    @POST("api/foodplaces")
-    suspend fun createFoodPlace(@Body foodPlace: FoodPlaceDto): Long
+    @POST("api/food-places")
+    suspend fun createFoodPlace(@Body foodPlace: FoodPlaceDto): FoodPlaceDto
 
-    @PUT("api/foodplaces/{id}")
+    @PUT("api/food-places/{id}")
     suspend fun updateFoodPlace(@Path("id") id: Long, @Body foodPlace: FoodPlaceDto)
 
-    @DELETE("api/foodplaces/{id}")
+    @DELETE("api/food-places/{id}")
     suspend fun deleteFoodPlace(@Path("id") id: Long)
 
-    @POST("api/foodplaces/batch")
+    @POST("api/food-places/batch")
     suspend fun getFoodPlacesBatch(@Body ids: List<Long>): List<FoodPlaceDto>
 
     // Routes
@@ -45,7 +45,7 @@ interface GourmetApi {
     suspend fun getRouteById(@Path("id") id: Long): RouteDto
 
     @POST("api/routes")
-    suspend fun createRoute(@Body route: RouteDto): Long
+    suspend fun createRoute(@Body route: RouteDto): RouteDto
 
     @PUT("api/routes/{id}")
     suspend fun updateRoute(@Path("id") id: Long, @Body route: RouteDto)

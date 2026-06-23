@@ -117,6 +117,7 @@ class RouteViewModel(
         viewModelScope.launch {
             try {
                 createRouteUseCase(route)
+                loadRoutes()
                 onSuccess()
             } catch (e: Exception) {
                 _error.value = "Error al crear ruta: ${e.message}"
@@ -131,6 +132,7 @@ class RouteViewModel(
         viewModelScope.launch {
             try {
                 updateRouteUseCase(route)
+                loadRoutes()
                 onSuccess()
             } catch (e: Exception) {
                 _error.value = "Error al actualizar ruta: ${e.message}"
@@ -145,6 +147,7 @@ class RouteViewModel(
         viewModelScope.launch {
             try {
                 deleteRouteUseCase(route)
+                loadRoutes()
                 onSuccess()
             } catch (e: Exception) {
                 _error.value = "Error al eliminar ruta: ${e.message}"

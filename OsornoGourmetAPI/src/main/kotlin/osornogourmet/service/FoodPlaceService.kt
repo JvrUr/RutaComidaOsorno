@@ -22,6 +22,10 @@ class FoodPlaceService(private val repository: IFoodPlaceRepository) {
         return repository.findByCategory(category).map { FoodPlaceMapper.toResponse(it) }
     }
 
+    suspend fun getByIds(ids: List<Long>): List<FoodPlaceResponse> {
+        return repository.findByIds(ids).map { FoodPlaceMapper.toResponse(it) }
+    }
+
     suspend fun create(userId: Long, request: FoodPlaceRequest): FoodPlaceResponse {
         val place = FoodPlace(
             name = request.name,
